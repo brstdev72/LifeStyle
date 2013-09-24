@@ -3,9 +3,11 @@ var FirstView = Ti.UI.currentWindow;
 var hgt = Ti.Platform.displayCaps.platformHeight;
 var wdh = Ti.Platform.displayCaps.platformWidth;
 
+var fnt = Ti.Platform.displayCaps.platformHeight * 0.035;
+
 var gridLeftArray = ['/images/1.png', '/images/3.png', '/images/3.png', '/images/5.png'];
 var gridLeftLabel = ['Aims', 'Yearly Planing', 'Weekly Planing', 'Questions'];
-var gridRightArray = ['/images/2.png', '/images/3.png', '/images/3.png', '/images/7.png'];
+var gridRightArray = ['/images/2.png', '/images/4.png', '/images/3.png', '/images/7.png'];
 var gridRightLabel = ['Compass', 'Rules', 'Daily Planing', 'Album Dreams'];
 
 var AllView = Ti.UI.createView({
@@ -31,7 +33,7 @@ AllView.add(anImageView);
 
 var GridViewLeft = Ti.UI.createView({
 	top : hgt * 0.1,
-	width : wdh * 0.48,
+	width : wdh * 0.49,
 	height : hgt * 0.65,
 	left : 0,
 	layout : 'vertical'
@@ -44,9 +46,69 @@ for (var i = 0; i < 4; i++) {
 	var subGridViewLeft = Ti.UI.createView({
 		backgroundImage : '/images/tile.png',
 		top : hgt * 0.012,
-		width : wdh * 0.48,
+		width : wdh * 0.49,
 		height : hgt * 0.15,
-		left : 0
+		left : 0,
+		id : i
+	});
+	subGridViewLeft.addEventListener('click', function(e) {
+		var tmp = e.source.id;
+
+		switch (tmp) {
+			case 0:
+				var alertDialog = Titanium.UI.createAlertDialog({
+					title : 'Upload Image',
+					message : 'Choose Your Option ?',
+					buttonNames : ['Create New Aim', 'View Previous Aims', 'Cancel'],
+					cancel : 1
+				});
+
+				alertDialog.addEventListener('click', function(theEvent) {
+					switch (theEvent.index) {
+						case 0:
+							var Aims = Ti.UI.createWindow({
+								backgroundColor : 'white',
+								navBarHidden : true,
+								modal : true
+							});
+							var CreateAims = require('CreateAims');
+							var createAims = new CreateAims();
+							Aims.add(createAims);
+							Aims.open();
+							break;
+						//This will never be reached, if you specified cancel for index 1
+						case 1:
+							var Aims = Ti.UI.createWindow({
+								backgroundColor : 'white',
+								navBarHidden : true,
+								modal : true
+							});
+							var ViewAims = require('ViewAims');
+							var viewAims = new ViewAims();
+							Aims.add(viewAims);
+							Aims.open();
+
+							Aims.open();
+							break;
+						default:
+							break;
+					}
+				});
+				alertDialog.show();
+				break;
+			case 1:
+
+				break;
+			case 2:
+
+				break;
+			case 3:
+
+				break;
+			default:
+				break;
+		}
+
 	});
 	GridViewLeft.add(subGridViewLeft);
 
@@ -57,6 +119,7 @@ for (var i = 0; i < 4; i++) {
 		height : hgt * 0.08,
 		top : '20%',
 		left : wdh * 0.03,
+		id : i
 	});
 
 	// Add to the parent view.
@@ -67,11 +130,12 @@ for (var i = 0; i < 4; i++) {
 		text : gridLeftLabel[i],
 		color : 'black',
 		font : {
-			fontSize : 24
+			fontSize : fnt
 		},
 		right : wdh * 0.04,
 		width : wdh * 0.25,
-		textAlign : 'center'
+		textAlign : 'center',
+		id : i
 	});
 
 	// Add to the parent view.
@@ -81,7 +145,7 @@ for (var i = 0; i < 4; i++) {
 
 var GridViewRight = Ti.UI.createView({
 	top : hgt * 0.1,
-	width : wdh * 0.48,
+	width : wdh * 0.49,
 	height : hgt * 0.65,
 	right : 0,
 	layout : 'vertical'
@@ -94,9 +158,71 @@ for (var i = 0; i < 4; i++) {
 	var subGridViewRight = Ti.UI.createView({
 		backgroundImage : '/images/tile.png',
 		top : hgt * 0.012,
-		width : wdh * 0.48,
+		width : wdh * 0.49,
 		height : hgt * 0.15,
-		right : 0
+		right : 0,
+		id : i
+	});
+	subGridViewRight.addEventListener('click', function(e) {
+		var tmp = e.source.id;
+
+		switch (tmp) {
+			case 0:
+
+				var alertDialog = Titanium.UI.createAlertDialog({
+					title : 'Upload Image',
+					message : 'Choose Your Option ?',
+					buttonNames : ['Create New Compass', 'View Previous Compass', 'Cancel'],
+					cancel : 1
+				});
+
+				alertDialog.addEventListener('click', function(theEvent) {
+					switch (theEvent.index) {
+						case 0:
+							var CompassWin = Ti.UI.createWindow({
+								backgroundColor : 'white',
+								navBarHidden : true,
+								modal : true
+							});
+							var Compass = require('Compass');
+							var compass = new Compass();
+							CompassWin.add(compass);
+							CompassWin.open();
+							break;
+						//This will never be reached, if you specified cancel for index 1
+						case 1:
+							var CompassWin = Ti.UI.createWindow({
+								backgroundColor : 'white',
+								navBarHidden : true,
+								modal : true
+							});
+							var ViewCompass = require('ViewCompass');
+							var viewCompass = new ViewCompass();
+							CompassWin.add(viewCompass);
+							CompassWin.open();
+
+							break;
+						default:
+							break;
+					}
+				});
+				alertDialog.show();
+
+				break;
+
+			case 1:
+
+				break;
+			case 2:
+
+				break;
+			case 3:
+
+				break;
+			default:
+				break;
+		}
+
 	});
 
 	GridViewRight.add(subGridViewRight);
@@ -108,6 +234,7 @@ for (var i = 0; i < 4; i++) {
 		height : hgt * 0.08,
 		top : '20%',
 		left : wdh * 0.03,
+		id : i
 	});
 
 	// Add to the parent view.
@@ -118,11 +245,12 @@ for (var i = 0; i < 4; i++) {
 		text : gridRightLabel[i],
 		color : 'black',
 		font : {
-			fontSize : 24
+			fontSize : fnt
 		},
 		width : wdh * 0.23,
 		right : wdh * 0.04,
-		textAlign : 'center'
+		textAlign : 'center',
+		id : i
 	});
 
 	// Add to the parent view.
@@ -153,11 +281,10 @@ Bottom.add(BottomIcon);
 
 // Create a Label.
 var BottomLabel = Ti.UI.createLabel({
-	top : '40%',
 	text : 'Buget Plan',
 	color : 'black',
 	font : {
-		fontSize : 24
+		fontSize : fnt
 	},
 	width : wdh * 0.8,
 	right : wdh * 0.04,
