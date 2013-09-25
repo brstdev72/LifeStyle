@@ -1,9 +1,30 @@
 function Compass() {
 
+	var editCompass = Ti.App.Properties.getBool('editCompass', false);
+	var Compassrowid = Ti.App.Properties.getString('Compassrowid');
+
+	var conn = Ti.Database.install('/LifeStyleDB.sqlite', 'LifeStyleDB');
+
+	var CompassResultSet = conn.execute("SELECT * FROM Compass where rowid=" + Compassrowid);
+	var this_Identity = '';
+	var this_SenseofLife = '';
+	var this_Mission = '';
+	var this_Values = '';
+	var this_Believes = '';
+
+	while (CompassResultSet.isValidRow()) {
+		this_Identity = CompassResultSet.fieldByName('Identity');
+		this_SenseofLife = CompassResultSet.fieldByName('SenseofLife');
+		this_Mission = CompassResultSet.fieldByName('Mission');
+		this_Values = CompassResultSet.fieldByName('CompassValues');
+		this_Believes = CompassResultSet.fieldByName('Believes');
+		CompassResultSet.next();
+	}
+
 	var hgt = Ti.Platform.displayCaps.platformHeight;
 	var wdh = Ti.Platform.displayCaps.platformWidth;
 
-	var fnt = Ti.Platform.displayCaps.platformHeight * 0.035;
+	var fnt = Ti.Platform.displayCaps.platformHeight * 0.028;
 
 	var AllView = Ti.UI.createView({
 		backgroundImage : '/images/ld-bg.png',
@@ -16,7 +37,7 @@ function Compass() {
 		backgroundImage : '/images/tile.png',
 		width : wdh,
 		height : hgt * 0.09,
-		top : 0,
+		top : hgt * 0.03,
 		left : 0
 	});
 
@@ -28,7 +49,8 @@ function Compass() {
 		text : 'Compass',
 		color : 'black',
 		font : {
-			fontSize : fnt
+			fontSize : fnt,
+			fontWeight : 'bold'
 		},
 		textAlign : 'center',
 	});
@@ -36,12 +58,72 @@ function Compass() {
 	// Add to the parent view.
 	TopBar.add(TopLabel);
 
+	// Create a Label.
+	var TopSaveLabel = Ti.UI.createLabel({
+		text : 'Save',
+		color : 'black',
+		font : {
+			fontSize : fnt
+		},
+		textAlign : 'center',
+		width : wdh * 0.2,
+		height : hgt * 0.09,
+		right : wdh * 0.02
+	});
+	TopSaveLabel.addEventListener('click', function() {
+		if (CompassIdentity.value != '') {
+			var conn = Ti.Database.install('/LifeStyleDB.sqlite', 'LifeStyleDB');
+			if (editCompass) {
+				var theData = conn.execute('UPDATE Compass SET Identity=?,SenseofLife=?,Mission=?,CompassValues=?,Believes=? WHERE rowid=?', CompassIdentity.value, CompassSense.value, CompassMission.value, CompassValues.value, CompassBelieve.value, Compassrowid);
+			} else {
+				var theData = conn.execute('INSERT INTO Compass (Identity,SenseofLife,Mission,CompassValues,Believes) VALUES(?,?,?,?,?)', CompassIdentity.value, CompassSense.value, CompassMission.value, CompassValues.value, CompassBelieve.value);
+			}
+			conn.close();
+			var CompassWin = Ti.UI.createWindow({
+				backgroundColor : 'white',
+				url : 'ViewCompass.js',
+				navBarHidden : true,
+				modal : true
+			});
+			CompassWin.open();
+			Ti.UI.currentWindow.remove(AllView);
+		} else {
+			alert('please Enter Your Compass Identity');
+		}
+	});
+
+	// Add to the parent view.
+	TopBar.add(TopSaveLabel);
+
+	// Create a Label.
+	var TopCancelview = Ti.UI.createView({
+		width : wdh * 0.2,
+		height : hgt * 0.09,
+		left : 0
+	});
+	TopCancelview.addEventListener('click', function() {
+		Ti.UI.currentWindow.remove(AllView);
+	});
+
+	// Add to the parent view.
+	TopBar.add(TopCancelview);
+
+	// Create a Label.
+	var TopCancelLabel = Ti.UI.createImageView({
+		image : '/images/back_b.png',
+		width : wdh * 0.09,
+		height : hgt * 0.07,
+		left : wdh * 0.03
+	});
+	// Add to the parent view.
+	TopCancelview.add(TopCancelLabel);
+
 	// Create a TextField.
 	var CompassIdentity = Ti.UI.createTextArea({
 		backgroundColor : 'white',
 		color : 'black',
-		height : hgt * 0.12,
-		top : hgt * 0.12,
+		height : hgt * 0.15,
+		top : hgt * 0.15,
 		left : wdh * 0.03,
 		font : {
 			fontSize : fnt
@@ -71,7 +153,7 @@ function Compass() {
 		backgroundColor : 'white',
 		color : 'black',
 		height : hgt * 0.12,
-		top : hgt * 0.27,
+		top : hgt * 0.33,
 		left : wdh * 0.03,
 		font : {
 			fontSize : fnt
@@ -100,7 +182,7 @@ function Compass() {
 		backgroundColor : 'white',
 		color : 'black',
 		height : hgt * 0.12,
-		top : hgt * 0.42,
+		top : hgt * 0.48,
 		left : wdh * 0.03,
 		font : {
 			fontSize : fnt
@@ -129,7 +211,7 @@ function Compass() {
 		backgroundColor : 'white',
 		color : 'black',
 		height : hgt * 0.12,
-		top : hgt * 0.57,
+		top : hgt * 0.63,
 		left : wdh * 0.03,
 		font : {
 			fontSize : fnt
@@ -158,7 +240,7 @@ function Compass() {
 		backgroundColor : 'white',
 		color : 'black',
 		height : hgt * 0.12,
-		top : hgt * 0.72,
+		top : hgt * 0.78,
 		left : wdh * 0.03,
 		font : {
 			fontSize : fnt
@@ -183,33 +265,19 @@ function Compass() {
 	// Add to the parent view.
 	AllView.add(CompassBelieve);
 
-	// Create a Button.
-	var Save = Ti.UI.createButton({
-		backgroundColor : '#AA7A36',
-		color : 'black',
-		font : {
-			fontSize : fnt
-		},
-		title : 'Save',
-		height : hgt * 0.1,
-		width : wdh * 0.3,
-		bottom : hgt * 0.05
-	});
-
-	// Listen for click events.
-	Save.addEventListener('click', function() {
-		if (CompassIdentity.value != '') {
-			var conn = Ti.Database.install('/LifeStyleDB.sqlite', 'LifeStyleDB');
-			var theData = conn.execute('INSERT INTO Compass (Identity,SenseofLife,Mission,CompassValues,Believes) VALUES(?,?,?,?,?)', CompassIdentity.value, CompassSense.value, CompassMission.value, CompassValues.value, CompassBelieve.value);
-			conn.close();
-			alert('Successfully Added');
-		} else {
-			alert('please Enter Your Compass Identity');
-		}
-	});
-
-	// Add to the parent view.
-	AllView.add(Save);
+	if (editCompass) {
+		CompassIdentity.value = this_Identity;
+		CompassSense.value = this_SenseofLife;
+		CompassMission.value = this_Mission;
+		CompassValues.value = this_Values;
+		CompassBelieve.value = this_Believes;
+	} else {
+		CompassIdentity.value = '';
+		CompassSense.value = '';
+		CompassMission.value = '';
+		CompassValues.value = '';
+		CompassBelieve.value = '';
+	}
 
 	return AllView;
 }

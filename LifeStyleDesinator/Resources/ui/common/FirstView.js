@@ -3,7 +3,7 @@ var FirstView = Ti.UI.currentWindow;
 var hgt = Ti.Platform.displayCaps.platformHeight;
 var wdh = Ti.Platform.displayCaps.platformWidth;
 
-var fnt = Ti.Platform.displayCaps.platformHeight * 0.035;
+var fnt = Ti.Platform.displayCaps.platformHeight * 0.028;
 
 var gridLeftArray = ['/images/1.png', '/images/3.png', '/images/3.png', '/images/5.png'];
 var gridLeftLabel = ['Aims', 'Yearly Planing', 'Weekly Planing', 'Questions'];
@@ -56,46 +56,13 @@ for (var i = 0; i < 4; i++) {
 
 		switch (tmp) {
 			case 0:
-				var alertDialog = Titanium.UI.createAlertDialog({
-					title : 'Upload Image',
-					message : 'Choose Your Option ?',
-					buttonNames : ['Create New Aim', 'View Previous Aims', 'Cancel'],
-					cancel : 1
+				var Aims = Ti.UI.createWindow({
+					backgroundColor : 'white',
+					url : 'ViewAims.js',
+					navBarHidden : true,
+					modal : true
 				});
-
-				alertDialog.addEventListener('click', function(theEvent) {
-					switch (theEvent.index) {
-						case 0:
-							var Aims = Ti.UI.createWindow({
-								backgroundColor : 'white',
-								navBarHidden : true,
-								modal : true
-							});
-							var CreateAims = require('CreateAims');
-							var createAims = new CreateAims();
-							Aims.add(createAims);
-							Aims.open();
-							break;
-						//This will never be reached, if you specified cancel for index 1
-						case 1:
-							var Aims = Ti.UI.createWindow({
-								backgroundColor : 'white',
-								navBarHidden : true,
-								modal : true
-							});
-							var ViewAims = require('ViewAims');
-							var viewAims = new ViewAims();
-							Aims.add(viewAims);
-							Aims.open();
-
-							Aims.open();
-							break;
-						default:
-							break;
-					}
-				});
-				alertDialog.show();
-				break;
+				Aims.open();
 			case 1:
 
 				break;
@@ -168,48 +135,14 @@ for (var i = 0; i < 4; i++) {
 
 		switch (tmp) {
 			case 0:
-
-				var alertDialog = Titanium.UI.createAlertDialog({
-					title : 'Upload Image',
-					message : 'Choose Your Option ?',
-					buttonNames : ['Create New Compass', 'View Previous Compass', 'Cancel'],
-					cancel : 1
+				var CompassWin = Ti.UI.createWindow({
+					backgroundColor : 'white',
+					url : 'ViewCompass.js',
+					navBarHidden : true,
+					modal : true
 				});
-
-				alertDialog.addEventListener('click', function(theEvent) {
-					switch (theEvent.index) {
-						case 0:
-							var CompassWin = Ti.UI.createWindow({
-								backgroundColor : 'white',
-								navBarHidden : true,
-								modal : true
-							});
-							var Compass = require('Compass');
-							var compass = new Compass();
-							CompassWin.add(compass);
-							CompassWin.open();
-							break;
-						//This will never be reached, if you specified cancel for index 1
-						case 1:
-							var CompassWin = Ti.UI.createWindow({
-								backgroundColor : 'white',
-								navBarHidden : true,
-								modal : true
-							});
-							var ViewCompass = require('ViewCompass');
-							var viewCompass = new ViewCompass();
-							CompassWin.add(viewCompass);
-							CompassWin.open();
-
-							break;
-						default:
-							break;
-					}
-				});
-				alertDialog.show();
-
+				CompassWin.open();
 				break;
-
 			case 1:
 
 				break;
